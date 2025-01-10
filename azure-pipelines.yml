@@ -20,33 +20,26 @@ steps:
       sudo apt-get update
       sudo apt-get install -y git
 
-
 # Step 3: Configure GitHub credentials
 - task: PowerShell@2
-  displayName: "Set GitHub credentials "
-  
+  displayName: "Set GitHub credentials"
   inputs:
     targetType: 'inline'
     script: |
-      git config --global user.name "Your GitHub Username"
-      git config --global user.email "Your Email Address"
+      git config --global user.name "spucelik"
+      git config --global user.email "spucelik@hotmail.com"
       git remote add origin https://$(GitHubToken)@github.com/Spucelik/Split-pages-from-a-document.git
   env:
-    GitHubToken: $(GitHubToken)  # Correct (aligned properly)
-
-
-# Step 3: Configure GitHub credentials
-- script: |
-    git config --global user.name "spucelik"
-    git config --global user.email "spucelik@hotmail.com"
-    git remote add origin https://github.com/Spucelik/Split-pages-from-a-document.git
-  displayName: "Set GitHub credentials"
-  env:
-    your-token: $(GitHubToken) # Use a secret variable for the token
+    GitHubToken: $(GitHubToken)  # Use the secret token securely
 
 # Step 4: Push changes to GitHub
-- script: |
-    git add .
-    git commit -m "Automated commit from Azure DevOps pipeline"
-    git push origin main
+- task: PowerShell@2
   displayName: "Push changes to GitHub"
+  inputs:
+    targetType: 'inline'
+    script: |
+      git add .
+      git commit -m "Automated commit from Azure DevOps pipeline"
+      git push origin main
+  env:
+    GitHubToken: $(GitHubToken)  # Use the secret token securely
