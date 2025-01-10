@@ -26,6 +26,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+    echo "The value of my variable is: $(GitHubToken)"
       git config --global user.name "spucelik"
       git config --global user.email "spucelik@hotmail.com"
       git remote add origin https://$(GitHubToken)@github.com/Spucelik/Split-pages-from-a-document.git
