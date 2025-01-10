@@ -28,7 +28,7 @@ steps:
     script: |
       git config --global user.name "Your GitHub Username"
       git config --global user.email "Your Email Address"
-      git remote add origin https://$(GitHubToken)@github.com/<your-username>/<your-repo>.git
+      git remote add origin https://$(GitHubToken)@github.com/Spucelik/Split-pages-from-a-document.git
   env:
     GitHubToken: $(GitHubToken) # Use a secret variable for the token
 
