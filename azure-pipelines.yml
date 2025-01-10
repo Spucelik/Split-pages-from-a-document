@@ -6,21 +6,49 @@ pool:
 
 steps:
 
-
 # Step 3: Configure Git User Information
 - task: PowerShell@2
   displayName: "Set Git User Information"
   inputs:
     targetType: 'inline'
     script: |
-      git config --global user.name "Spucelik"
+      git config --global user.name "spucelik"
       git config --global user.email "steve@pucelik.net"
 
+# Step 4: Add GitHub Remote
+- task: PowerShell@2
+  displayName: "Add GitHub Remote"
+  inputs:
+    targetType: 'inline'
+    script: |
+      git remote add origin https://$(GitHubToken)@github.com/Spucelik/Split-pages-from-a-document.git
+  env:
+    GitHubToken: $(GitHubToken)
 
+# Step 5: Create Branch and Initial Commit (if necessary)
+- task: PowerShell@2
+  displayName: "Create main branch and initial commit"
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Check if the repository is empty (no commits yet)
+      if [ -z "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]; then
+        echo "Repository is empty. Initializing repository."
+        git checkout -b main
+        echo "# Split-pages-from-a-document" > README.md
+        git add README.md
+        git commit -m "Initial commit"
+      else
+        echo "Repository already initialized."
+      fi
 
-      # Commit and push changes to main branch
-      git commit -m "Initial commit" || echo "No changes to commit"
-      git branch -M main
+# Step 6: Push Branch to GitHub
+- task: PowerShell@2
+  displayName: "Push branch to GitHub"
+  inputs:
+    targetType: 'inline'
+    script: |
+      git branch -M main  # Ensure the branch is named 'main'
       git push -u origin main
   env:
     GitHubToken: $(GitHubToken)
