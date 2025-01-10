@@ -16,15 +16,6 @@ steps:
       git config --global user.name "Spucelik"
       git config --global user.email "steve@pucelik.net"
 
-# Step 4: Add GitHub Remote
-- task: PowerShell@2
-  displayName: "Add GitHub Remote"
-  inputs:
-    targetType: 'inline'
-    script: |
-      git remote add origin https://$(GitHubToken)@github.com/Spucelik/Split-pages-from-a-document.git
-  env:
-    GitHubToken: $(GitHubToken)
 
 # Step 5: Commit and Push Changes to GitHub
 - task: PowerShell@2
