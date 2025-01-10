@@ -5,11 +5,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# Step 1: Checkout code from Azure DevOps
-- task: Checkout@1
-  displayName: "Checkout code from Azure Repos"
-  inputs:
-    clean: true
 
 # Step 2: Install Git (if necessary) using PowerShell
 - task: PowerShell@2
