@@ -5,11 +5,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# Step 1: Checkout code from Azure DevOps
-- task: Checkout@1
-  displayName: "Checkout code from Azure Repos"
-  inputs:
-    clean: true
 
 
 # Step 3: Configure Git User Information
@@ -19,7 +14,7 @@ steps:
     targetType: 'inline'
     script: |
       git config --global user.name "spucelik"
-      git config --global user.email "spucelik@hotmail.com"
+      git config --global user.email "steve@pucelik,.net"
 
 # Step 4: Add GitHub Remote
 - task: PowerShell@2
