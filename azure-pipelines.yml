@@ -1,41 +1,51 @@
 trigger:
-- main  # Adjust this to the branch you want to monitor in Azure DevOps.
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+# Step 1: Checkout code from Azure DevOps
+- task: Checkout@1
+  displayName: "Checkout code from Azure Repos"
+  inputs:
+    clean: true
 
-# Step 2: Install Git (if necessary) using PowerShell
+
+# Step 3: Configure Git User Information
 - task: PowerShell@2
-  displayName: "Install Git"
+  displayName: "Set Git User Information"
   inputs:
     targetType: 'inline'
     script: |
-      sudo apt-get update
-      sudo apt-get install -y git
-
-# Step 3: Configure GitHub credentials
-- task: PowerShell@2
-  displayName: "Set GitHub credentials"
-  inputs:
-    targetType: 'inline'
-    script: |
-    echo "The value of my variable is: $(GitHubToken)"
       git config --global user.name "spucelik"
-      git config --global user.email "spucelik@pucelik.net"
+      git config --global user.email "spucelik@hotmail.com"
+
+# Step 4: Add GitHub Remote
+- task: PowerShell@2
+  displayName: "Add GitHub Remote"
+  inputs:
+    targetType: 'inline'
+    script: |
       git remote add origin https://$(GitHubToken)@github.com/Spucelik/Split-pages-from-a-document.git
   env:
-    GitHubToken: $(GitHubToken)  # Use the secret token securely
+    GitHubToken: $(GitHubToken)
 
-# Step 4: Push changes to GitHub
+# Step 5: Commit and Push Changes to GitHub
 - task: PowerShell@2
-  displayName: "Push changes to GitHub"
+  displayName: "Initial Commit to GitHub (if necessary)"
   inputs:
     targetType: 'inline'
     script: |
-      git add .
-      git commit -m "Automated commit from Azure DevOps pipeline"
-      git push origin main
+      # Ensure a README.md file exists to avoid pushing an empty repository
+      if [ ! -f README.md ]; then
+        echo "# Split-pages-from-a-document" > README.md
+        git add README.md
+      fi
+
+      # Commit and push changes to main branch
+      git commit -m "Initial commit" || echo "No changes to commit"
+      git branch -M main
+      git push -u origin main
   env:
-    GitHubToken: $(GitHubToken)  # Use the secret token securely
+    GitHubToken: $(GitHubToken)
