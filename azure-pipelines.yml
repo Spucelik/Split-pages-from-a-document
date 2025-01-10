@@ -13,7 +13,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      git config --global user.name "spucelik"
+      git config --global user.name "Spucelik"
       git config --global user.email "steve@pucelik.net"
 
 # Step 4: Add GitHub Remote
