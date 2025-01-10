@@ -1,22 +1,49 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+- main  # Adjust this to the branch you want to monitor in Azure DevOps.
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+# Step 1: Checkout code from Azure DevOps
+- task: Checkout@1
+  displayName: "Checkout code from Azure Repos"
+  inputs:
+    clean: true
 
+# Step 2: Install Git (if necessary) using PowerShell
+- task: PowerShell@2
+  displayName: "Install Git"
+  inputs:
+    targetType: 'inline'
+    script: |
+      sudo apt-get update
+      sudo apt-get install -y git
 
+# Step 3: Configure GitHub credentials
+- task: PowerShell@2
+  displayName: "Set GitHub credentials"
+  inputs:
+    targetType: 'inline'
+    script: |
+      git config --global user.name "Your GitHub Username"
+      git config --global user.email "Your Email Address"
+      git remote add origin https://$(GitHubToken)@github.com/<your-username>/<your-repo>.git
+  env:
+    GitHubToken: $(GitHubToken) # Use a secret variable for the token
+
+# Step 3: Configure GitHub credentials
 - script: |
-    set -x
-    git remote add github https://github.com/Spucelik/Split-pages-from-a-document.git
-    git push github main
-  displayName: 'Push to GitHub'
+    git config --global user.name "spucelik"
+    git config --global user.email "spucelik@hotmail.com"
+    git remote add origin https://github.com/Spucelik/Split-pages-from-a-document.git
+  displayName: "Set GitHub credentials"
+  env:
+    your-token: $(GitHubToken) # Use a secret variable for the token
 
+# Step 4: Push changes to GitHub
+- script: |
+    git add .
+    git commit -m "Automated commit from Azure DevOps pipeline"
+    git push origin main
+  displayName: "Push changes to GitHub"
