@@ -20,9 +20,11 @@ steps:
       sudo apt-get update
       sudo apt-get install -y git
 
+
 # Step 3: Configure GitHub credentials
 - task: PowerShell@2
-  displayName: "Set GitHub credentials"
+  displayName: "Set GitHub credentials "
+  
   inputs:
     targetType: 'inline'
     script: |
@@ -30,7 +32,8 @@ steps:
       git config --global user.email "Your Email Address"
       git remote add origin https://$(GitHubToken)@github.com/Spucelik/Split-pages-from-a-document.git
   env:
-    GitHubToken: $(GitHubToken) # Use a secret variable for the token
+    GitHubToken: $(GitHubToken)  # Correct (aligned properly)
+
 
 # Step 3: Configure GitHub credentials
 - script: |
